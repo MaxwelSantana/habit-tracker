@@ -1,16 +1,14 @@
-import styled from 'styled-components';
-import GlobalStyle from './GlobalStyle';
-const Header = styled.h1`
-    color: red;
-`;
-
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Login from './pages/Login';
 function App() {
     return (
-        <>
-            <Header>Hello World</Header>
-            <GlobalStyle />
-        </>
+        <div className="app">
+            <Router>
+                <Switch>
+                    <Route exact path="/" component={Login} />
+                </Switch>
+            </Router>
+        </div>
     );
 }
-
 export default App;
