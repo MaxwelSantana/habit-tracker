@@ -20,6 +20,8 @@ const GlobalStyle = createGlobalStyle`
   :root {
     --selected-day: #ffffff;
     --selected-day-background: #712FD4;
+    --selected-navitem: #ffffff;
+    --selected-navitem-background: #712FD4;
     --surface: #ffffff;
     --background: #F9FAFB;
     --border: 1px solid rgba(0,0,0,.2);
