@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Calendar from '../components/Calendar';
-import { CheckCircle, List, User } from 'react-feather';
+import {
+    CheckCircle,
+    List,
+    User,
+    Plus,
+    ArrowUpCircle,
+    ArrowUp,
+} from 'react-feather';
 
-const Container = styled.div``;
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 81px);
+    overflow: hidden;
+`;
+
+const ScrollContainer = styled.div`
+    flex: 1;
+    overflow-y: auto;
+`;
 
 export const DashboardCard = styled.div`
     height: 7rem;
@@ -83,9 +100,58 @@ const NavItem = styled.li`
     }
 `;
 
-const QuickAddTask = styled.div``;
+const QuickAddTaskForm = styled.form`
+    margin: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    --input-padding: 1rem;
+    --icon-size: 1.25rem;
+    --icon-padding: 0.5rem;
+    --input-icon-offset: calc(
+        var(--icon-size) + ((var(--icon-padding) + var(--input-padding)) * 2)
+    );
+
+    input {
+        width: 100%;
+        font-size: 1rem;
+
+        padding: var(--input-padding);
+        padding-right: var(--input-icon-offset);
+        border-radius: var(--border-radius);
+        border: none;
+        border: thin solid;
+    }
+
+    input:focus ~ .send-button,
+    input:not(:placeholder-shown) ~ .send-button {
+        background: var(--primary);
+        border: thin solid var(--primary);
+        color: var(--icon);
+    }
+
+    .send-button {
+        position: absolute;
+        right: var(--input-padding);
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+
+        color: var(--icon-disabled);
+        border: thin solid var(--icon-disabled);
+
+        transition: background 0.2s ease-in-out;
+    }
+
+    svg {
+        height: var(--icon-size);
+        width: var(--icon-size);
+        padding: var(--icon-padding);
+    }
+`;
 
 export default function Home() {
+    const newTaskRef = useRef('');
     const [tasks, setTasks] = useState([
         {
             id: 1,
@@ -99,23 +165,73 @@ export default function Home() {
             id: 3,
             name: 'Finish Frontend Project',
         },
+        {
+            id: 4,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 5,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 6,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 7,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 8,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 9,
+            name: 'Finish Frontend Project',
+        },
+        {
+            id: 10,
+            name: 'Finish Frontend Project',
+        },
     ]);
+
+    function handleQuickAddTaskForm(event) {
+        event.preventDefault();
+
+        setTasks([
+            { id: tasks.length + 1, name: newTaskRef.current.value },
+            ...tasks,
+        ]);
+    }
     return (
-        <Container>
-            <Calendar />
-            <DashboardCard />
-            <TasksTitle>Tasks</TasksTitle>
-            <TaskList>
-                {tasks.map((task) => (
-                    <TaskItem key={task.id}>
-                        <TaskCompleteButton />
-                        {task.name}
-                    </TaskItem>
-                ))}
-            </TaskList>
-            <QuickAddTask>
-                <input type="text" />
-            </QuickAddTask>
+        <>
+            <Container>
+                <Calendar />
+                <ScrollContainer>
+                    <DashboardCard />
+                    <TasksTitle>Tasks</TasksTitle>
+                    <TaskList>
+                        {tasks.map((task) => (
+                            <TaskItem key={task.id}>
+                                <TaskCompleteButton />
+                                {task.name}
+                            </TaskItem>
+                        ))}
+                    </TaskList>
+                </ScrollContainer>
+                <QuickAddTaskForm onSubmit={handleQuickAddTaskForm}>
+                    <input
+                        type="text"
+                        id="addTaskInput"
+                        placeholder="Add a Task"
+                        aria-label="Add a Task"
+                        ref={newTaskRef}
+                    />
+                    <button className="send-button" type="submit">
+                        <ArrowUp />
+                    </button>
+                </QuickAddTaskForm>
+            </Container>
             <BottomNav>
                 <NavList>
                     <NavItem className="selected">
@@ -129,6 +245,6 @@ export default function Home() {
                     </NavItem>
                 </NavList>
             </BottomNav>
-        </Container>
+        </>
     );
 }
